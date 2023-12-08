@@ -1,12 +1,12 @@
 #include <esp_now.h>
 #include <WiFi.h>
-uint8_t broadcastAddress[] = {00xA0, 0xB7, 0x65, 0x4C, 0x0A, 0xEC}; /*dirección MAC de quien recibe los datos*/
+uint8_t broadcastAddress[] = {0xA0, 0xB7, 0x65, 0x4C, 0x0A, 0xEC}; /*dirección MAC de quien recibe los datos*/
 
 #include <ArduinoJson.h>//JSON
 
 String send_jsondata;
 StaticJsonDocument<256> doc_to_espnow;
-const int readhumedity 4
+const int readHumedity = 4;
 //-----------------------------------------------------------------
 
 //callback para verificar que se enviaron los datos
@@ -30,7 +30,7 @@ void setup() {
 
   esp_now_register_send_cb(OnDataSent); //se hace el callback           
   
-  esp_now_peer_info_t peerInfo; //pendiente de revisión = {} parametros peer
+  esp_now_peer_info_t peerInfo = {}; //pendiente de revisión = {} parametros peer
   memcpy(peerInfo.peer_addr, broadcastAddress, 6);
   /*copia los 6 bytes de la dirección mac a la dirección peer*/
   peerInfo.channel = 0;
@@ -54,5 +54,5 @@ void loop() {
                                                     
   Serial.println(send_jsondata); 
   send_jsondata = "";
-  delay(40000000);
+  delay(2000);
 }
