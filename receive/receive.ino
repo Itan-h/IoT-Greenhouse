@@ -1,15 +1,12 @@
 #include <esp_now.h>
 #include <WiFi.h>
-#include <ArduinoJson.h> //https://github.com/bblanchon/ArduinoJson
+#include <ArduinoJson.h> 
 
-StaticJsonDocument<256> doc_from_espnow; // JSON Doc for Receiving data from ESPNOW Devices
+StaticJsonDocument<256> doc_from_espnow; 
 
-String recv_jsondata;               // recieved JSON string
+String recv_jsondata;    //string JSON
 
-int humidity1 = 0;
-int humidity2 = 0;
-
-// Hardware Serial 2
+// UART
 #define RXD2 16
 #define TXD2 17
 
@@ -45,7 +42,7 @@ void setup() {
   digitalWrite(2, LOW);
   delay(2000);
 
-  // Initialising UART Communication
+  // Inicializar UART
   Serial.begin(115200);
   Serial2.begin(115200, SERIAL_8N1, RXD2, TXD2);//protocolo de 8 bits, 1 stop bit
 
