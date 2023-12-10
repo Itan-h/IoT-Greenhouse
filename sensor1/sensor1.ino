@@ -3,10 +3,10 @@
 uint8_t broadcastAddress[] = {0xA0, 0xB7, 0x65, 0x4C, 0x0A, 0xEC}; /*dirección MAC de quien recibe los datos*/
 
 #include <ArduinoJson.h>//JSON
+#define readHumedity 27
 
 String send_jsondata;
 StaticJsonDocument<256> doc_to_espnow;
-const int readHumedity = 4;
 //-----------------------------------------------------------------
 
 //callback para verificar que se enviaron los datos
@@ -15,11 +15,8 @@ void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
   Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
 }
 
-
-void setup() {
-  Serial.begin(115200);
-  
-  WiFi.mode(WIFI_STA);
+void protocol(){
+    WiFi.mode(WIFI_STA);
   
 
   //inicializar esp now
@@ -41,18 +38,23 @@ void setup() {
     Serial.println("Failed to add peer");
     return;
   }
+  }
+
+void setup() {
+  Serial.begin(115200);
 }
 
 void loop() {
-  //PENDIENTE                                                
+  //PENDIENTE
+  WiFi.mode(WIFI_MODE_NULL);                                                
   float hum1 = analogRead(readHumedity);
-  float hum2 = 0;
-  doc_to_espnow["v1"] = hum1;                 //para est caso el sensor 1 es el que mide      
-  doc_to_espnow["v2"] = hum2;                       
+  Serial.println(hum1);
+  protocol();
+  doc_to_espnow["v1"] = hum1;                 //para est caso el sensor 1 es el que mide                             
   serializeJson(doc_to_espnow, send_jsondata);
   esp_now_send(broadcastAddress, (uint8_t *) send_jsondata.c_str(), send_jsondata.length());
                                                     
   Serial.println(send_jsondata); 
   send_jsondata = "";
-  delay(2000);
+  delay(36000);
 }
